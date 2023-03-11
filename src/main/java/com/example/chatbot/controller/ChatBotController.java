@@ -1,6 +1,5 @@
 package com.example.chatbot.controller;
 
-import com.example.chatbot.domain.Food;
 import com.example.chatbot.dto.Button;
 import com.example.chatbot.dto.ResponseDto;
 import com.example.chatbot.service.ChatBotService;
@@ -20,17 +19,19 @@ public class ChatBotController {
 
     @PostMapping("/v1")
     public ResponseDto findRandom(@RequestBody Map<String, Object> params) {
-        HashMap<String, Object> userRequest = (HashMap<String, Object>) params.get("userRequest");
-        String utter = userRequest.get("utterance").toString().replace("\n", "");
-        String food = chatBotService.findRandomFood(utter);
+        HashMap<String, Object> action = (HashMap<String, Object>) params.get("action");
+        HashMap<String, Object> param = (HashMap<String, Object>) action.get("params");
+        String category = param.get("category").toString();
         List<HashMap<String, Object>> outputs = new ArrayList<>();
         HashMap<String, Object> simpleText = new HashMap<>();
         HashMap<String, Object> text = new HashMap<>();
+        String s = chatBotService.listAllFood(category);
+        s += "다시 선택하려면 점메추 버튼 클릭";
 
-        String textSt = food + "는(은) 어떠신가요? 다시 선택하려면 점메추 버튼 클릭";
-        text.put("text", textSt);
+        text.put("text",s);
         simpleText.put("simpleText", text);
         outputs.add(simpleText);
+
         return new ResponseDto(outputs);
     }
 

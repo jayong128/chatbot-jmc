@@ -22,4 +22,14 @@ public class ChatBotService {
         int randNum = random.nextInt(foodList.size());
         return foodList.get(randNum).getFoodName();
     }
+
+    public String listAllFood(String categoryName) {
+        String res = "";
+        Category category = categoryRepository.findByCategoryName(categoryName).get();
+        for (Food food : category.getFoodList()) {
+            res += food.getFoodName();
+            res += "\n";
+        }
+        return res;
+    }
 }
